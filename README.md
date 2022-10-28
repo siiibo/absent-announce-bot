@@ -43,7 +43,7 @@ mv build/.clasp.json ./
   - 特に `oauthScopes`
 
 
-#### GoogleDrive上にある既存のGASプロジェクトを利用する場合
+### GoogleDrive上にある既存のGASプロジェクトを利用する場合
 
 1. プロジェクトのrootDirに.clasp.jsonを手動で作成する
 1. build/appsscript.jsonをプロジェクトにあわせて修正する
