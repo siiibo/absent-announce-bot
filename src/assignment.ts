@@ -19,9 +19,9 @@ function setMidnight(nowDate: Date) {
   return midnightDate;
 }
 
-function getStartEndDate(searchPeriod: string) {
+function getStartEndDate(searchPeriod: "day" | "week" | "month") {
   switch (searchPeriod) {
-    case "today": {
+    case "day": {
       const startDate = setMidnight(new Date());
       const endDate = addDays(startDate, 1);
       return { start: startDate, end: endDate };
@@ -49,8 +49,8 @@ function main() {
   const result: boolean = isSameDate(date1, date2);
   console.log(result);
   const startEndDate = getStartEndDate("month");
-  console.log(startEndDate?.start);
-  console.log(startEndDate?.end);
+  console.log(startEndDate.start);
+  console.log(startEndDate.end);
 }
 function isSameDate(date1: Date, date2: Date): boolean {
   return (
