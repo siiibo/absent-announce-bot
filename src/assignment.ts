@@ -11,18 +11,6 @@ import {
   addMonths,
 } from "date-fns";
 
-function isSameDate(date1: Date, date2: Date): boolean {
-  return (
-    date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate()
-  );
-}
-
-const date1: Date = new Date();
-const date2: Date = new Date();
-date2.setDate(date2.getDate() + 1);
-const result: boolean = isSameDate(date1, date2);
-console.log(result);
-
 function setMidnight(nowDate: Date) {
   const midnightDate = setMilliseconds(
     setSeconds(setMinutes(setHours(nowDate, 0), 0), 0),
@@ -53,7 +41,21 @@ function getStartEndDate(searchPeriod: string) {
     }
   }
 }
-const startEndDate = getStartEndDate("month");
 
-console.log(startEndDate?.start);
-console.log(startEndDate?.end);
+function main() {
+  const date1: Date = new Date();
+  const date2: Date = new Date();
+  date2.setDate(date2.getDate() + 1);
+  const result: boolean = isSameDate(date1, date2);
+  console.log(result);
+  const startEndDate = getStartEndDate("month");
+  console.log(startEndDate?.start);
+  console.log(startEndDate?.end);
+}
+function isSameDate(date1: Date, date2: Date): boolean {
+  return (
+    date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate()
+  );
+}
+
+main();
