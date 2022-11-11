@@ -15,7 +15,10 @@
     "postinstall": "mkdir -p build && cp appsscript.json build/appsscript.json",
     "create": "pwd | awk -F'/' '{print $NF}' | xargs -I {} clasp create --rootDir build --title {} --type standalone && mv build/.clasp.json ./"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@hi-se/web-api": "https://gitpkg.now.sh/hi-se/node-slack-sdk/packages/web-api?ab078b145617d511327a8f74fe34f1d4695ff893",
+    "date-fns": "^2.29.3"
+  },
   "devDependencies": {
     "@google/clasp": "^2.4.2",
     "@types/google-apps-script": "^1.0.29",
@@ -24,6 +27,7 @@
     "eslint": "^8.26.0",
     "gas-webpack-plugin": "^2.0.0",
     "ts-loader": "^9.4.1",
+    "ts-node": "^10.9.1",
     "tslib": "^2.1.0",
     "typescript": "^4.8.4",
     "webpack": "5.74.0",
