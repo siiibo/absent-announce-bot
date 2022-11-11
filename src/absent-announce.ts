@@ -42,7 +42,6 @@ export const main = () => {
   const client = getSlackClient(slackAppToken);
 
   const calendarIds = getSlackMember(slackAppToken, client);
-  // const calendarIds = ["masaya.hirose@siiibo.com", "yukiko.orui@siiibo.com"];
 
   const searchWord = /休暇/;
   const postSlackChannel = "#attendance";
