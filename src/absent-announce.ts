@@ -6,6 +6,7 @@ import {
   startOfWeek,
   startOfMonth,
   addMonths,
+  format,
 } from "date-fns";
 
 export const deleteAndSetTriggers = () => {
@@ -40,8 +41,8 @@ export const main = () => {
   // const calendarIds = ["masaya.hirose@siiibo.com", "yukiko.orui@siiibo.com"];
 
   const searchWord = /休暇/;
-  // const postSlackChannel = "#attendance";
-  const postSlackChannel = "#sysadm_test";
+  const postSlackChannel = "#attendance";
+  // const postSlackChannel = "#sysadm_test";
   type SearchPeriod = "day" | "week" | "month";
   const searchPeriod: SearchPeriod = "day";
   const startEndDate = getStartEndDate(searchPeriod);
@@ -60,12 +61,12 @@ export const main = () => {
 
   const client = getSlackClient(slackAppToken);
 
-  // if (displayMessage !== undefined) {
-  //   client.chat.postMessage({
-  //     channel: postSlackChannel,
-  //     text: displayMessage,
-  //   });
-  // }
+  if (displayMessage !== undefined) {
+    client.chat.postMessage({
+      channel: postSlackChannel,
+      text: displayMessage,
+    });
+  }
 };
 
 const getSlackMember = (slackAppToken: string): string[] => {
@@ -151,23 +152,11 @@ const convertEmailtoName = (email: string): string => {
 const createMessage = (
   event: GoogleAppsScript.Calendar.CalendarEvent
 ): string => {
-  const eventStartMonth = event.getStartTime().getMonth() + 1; // 1月, 2月, 3月... → 0, 1, 2...
-  const eventStartDate = event.getStartTime().getDate();
-  const eventStartHour = String(event.getStartTime().getHours()).padStart(
-    2,
-    "0"
-  );
-  const eventStartMinute = String(event.getStartTime().getMinutes()).padStart(
-    2,
-    "0"
-  );
-  const eventEndMonth = event.getEndTime().getMonth() + 1;
-  const eventEndDate = event.getEndTime().getDate() - 1;
-  const eventEndHour = String(event.getEndTime().getHours()).padStart(2, "0");
-  const eventEndMinute = String(event.getEndTime().getMinutes()).padStart(
-    2,
-    "0"
-  );
+  const eventStartDate = format(Number(event.getStartTime()), "M/d");
+  const eventStartTime = format(Number(event.getStartTime()), "k:mm");
+
+  const eventEndDate = format(Number(event.getEndTime()), "M/d");
+  const eventEndTime = format(Number(event.getEndTime()), "k:mm");
 
   const creatorEmail = event.getCreators()[0];
   const name = convertEmailtoName(creatorEmail);
@@ -175,13 +164,13 @@ const createMessage = (
   if (event.isAllDayEvent()) {
     const eventTitle = "全休";
     // 【全休】 orui yukikoさん 10/4〜10/8 終日
-    const message = `【${eventTitle}】 ${name}さん ${eventStartMonth}/${eventStartDate}〜${eventEndMonth}/${eventEndDate} 終日\n`;
+    const message = `【${eventTitle}】 ${name}さん ${eventStartDate}〜${eventEndDate} 終日\n`;
 
     return message;
   } else {
     const eventTitle = "半休";
     // 【半休】 orui yukikoさん 10/21 10:00〜10:30
-    const message = `【${eventTitle}】 ${name}さん ${eventStartMonth}/${eventStartDate} ${eventStartHour}:${eventStartMinute}〜${eventEndHour}:${eventEndMinute}\n`;
+    const message = `【${eventTitle}】 ${name}さん ${eventStartDate} ${eventStartTime}〜${eventEndTime}\n`;
 
     return message;
   }
