@@ -41,9 +41,10 @@ export const main = () => {
   // const calendarIds = ["masaya.hirose@siiibo.com", "yukiko.orui@siiibo.com"];
 
   const searchWord = /休暇/;
-  const postSlackChannel = "#attendance";
-  // const postSlackChannel = "#sysadm_test";
-  const searchPeriod = "day"; // day, week, month
+  // const postSlackChannel = "#attendance";
+  const postSlackChannel = "#sysadm_test";
+  type SearchPeriod = "day" | "week" | "month";
+  const searchPeriod: SearchPeriod = "day";
   const startEndDate = getStartEndDate(searchPeriod);
   const startDate = startEndDate.start;
   const endDate = startEndDate.end;
