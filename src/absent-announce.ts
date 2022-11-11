@@ -1,10 +1,7 @@
 import { GasWebClient as SlackClient } from "@hi-se/web-api";
 import {
   addDays,
-  setMilliseconds,
-  setSeconds,
-  setMinutes,
-  setHours,
+  set,
   nextMonday,
   startOfWeek,
   startOfMonth,
@@ -109,10 +106,13 @@ function isSameDate(
 }
 
 const setMidnight = (nowDate: Date): Date => {
-  const midnightDate = setMilliseconds(
-    setSeconds(setMinutes(setHours(nowDate, 0), 0), 0),
-    0
-  );
+  const midnightDate = set(nowDate, {
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    milliseconds: 0,
+  });
+
   return midnightDate;
 };
 
