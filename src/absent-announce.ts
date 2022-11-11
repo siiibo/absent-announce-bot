@@ -37,8 +37,6 @@ const setTrigger = (triggeredFunction: string, date: Date) => {
 export const main = () => {
   const slackAppToken =
     PropertiesService.getScriptProperties().getProperty("SLACK_APP_TOKEN");
-  if (!slackAppToken) throw new Error("SLACK_APP_TOKEN is not defined");
-
   const calendarIds = getSlackMember(slackAppToken);
   // const calendarIds = ["masaya.hirose@siiibo.com", "yukiko.orui@siiibo.com"];
 
@@ -71,7 +69,7 @@ export const main = () => {
   }
 };
 
-const getSlackMember = (slackAppToken: string): string[] => {
+const getSlackMember = (slackAppToken: string | null): string[] => {
   const options: GoogleAppsScript.URL_Fetch.URLFetchRequestOptions = {
     method: "get",
     contentType: "application/x-www-form-urlencoded",
