@@ -38,9 +38,11 @@ export const main = () => {
   const slackAppToken =
     PropertiesService.getScriptProperties().getProperty("SLACK_APP_TOKEN");
   const calendarIds = getSlackMember(slackAppToken);
+  // const calendarIds = ["masaya.hirose@siiibo.com", "yukiko.orui@siiibo.com"];
 
   const searchWord = /休暇/;
   const postSlackChannel = "#attendance";
+  // const postSlackChannel = "#sysadm_test";
   const searchPeriod = "day"; // day, week, month
   const startEndDate = getStartEndDate(searchPeriod);
   const startDate = startEndDate.start;
