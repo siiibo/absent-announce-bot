@@ -45,7 +45,6 @@ export const main = () => {
 
   const searchWord = /休暇/;
   const postSlackChannel = "#attendance";
-  // const postSlackChannel = "#sysadm_test";
   const searchPeriod: SearchPeriod = "day";
   const startEndDate = getStartEndDate(searchPeriod);
   const startDate = startEndDate.start;
