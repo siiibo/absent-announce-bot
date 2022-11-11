@@ -9,6 +9,8 @@ import {
   format,
 } from "date-fns";
 
+type SearchPeriod = "day" | "week" | "month";
+
 export const deleteAndSetTriggers = () => {
   const triggeredFunction = "main";
   deleteTriggers(triggeredFunction);
@@ -45,7 +47,6 @@ export const main = () => {
   const searchWord = /休暇/;
   const postSlackChannel = "#attendance";
   // const postSlackChannel = "#sysadm_test";
-  type SearchPeriod = "day" | "week" | "month";
   const searchPeriod: SearchPeriod = "day";
   const startEndDate = getStartEndDate(searchPeriod);
   const startDate = startEndDate.start;
@@ -116,7 +117,7 @@ const setMidnight = (nowDate: Date): Date => {
 };
 
 const getStartEndDate = (
-  searchPeriod: "day" | "week" | "month"
+  searchPeriod: SearchPeriod
 ): { start: Date; end: Date } => {
   switch (searchPeriod) {
     case "day": {
