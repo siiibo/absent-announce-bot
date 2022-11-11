@@ -60,12 +60,12 @@ export const main = () => {
 
   const client = getSlackClient(slackAppToken);
 
-  if (displayMessage !== undefined) {
-    client.chat.postMessage({
-      channel: postSlackChannel,
-      text: displayMessage,
-    });
-  }
+  // if (displayMessage !== undefined) {
+  //   client.chat.postMessage({
+  //     channel: postSlackChannel,
+  //     text: displayMessage,
+  //   });
+  // }
 };
 
 const getSlackMember = (slackAppToken: string): string[] => {
@@ -175,43 +175,14 @@ const createMessage = (
   if (event.isAllDayEvent()) {
     const eventTitle = "全休";
     // 【全休】 orui yukikoさん 10/4〜10/8 終日
-    const message =
-      "【" +
-      eventTitle +
-      "】 " +
-      name +
-      "さん " +
-      eventStartMonth +
-      "/" +
-      eventStartDate +
-      "〜" +
-      eventEndMonth +
-      "/" +
-      eventEndDate +
-      " 終日" +
-      "\n";
+    const message = `【${eventTitle}】 ${name}さん ${eventStartMonth}/${eventStartDate}〜${eventEndMonth}/${eventEndDate} 終日\n`;
+
     return message;
   } else {
     const eventTitle = "半休";
     // 【半休】 orui yukikoさん 10/21 10:00〜10:30
-    const message =
-      "【" +
-      eventTitle +
-      "】 " +
-      name +
-      "さん " +
-      eventStartMonth +
-      "/" +
-      eventStartDate +
-      " " +
-      eventStartHour +
-      ":" +
-      eventStartMinute +
-      "〜" +
-      eventEndHour +
-      ":" +
-      eventEndMinute +
-      "\n";
+    const message = `【${eventTitle}】 ${name}さん ${eventStartMonth}/${eventStartDate} ${eventStartHour}:${eventStartMinute}〜${eventEndHour}:${eventEndMinute}\n`;
+
     return message;
   }
 };
