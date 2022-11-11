@@ -81,7 +81,6 @@ const getSlackMember = (slackAppToken: string | null): string[] => {
 
   const emailList = [];
   const url = "https://slack.com/api/users.list";
-  // const response = UrlFetchApp.fetch(url, options);
   const response = UrlFetchApp.fetch(url, options);
 
   const slackMembers = JSON.parse(response.getContentText()).members;
