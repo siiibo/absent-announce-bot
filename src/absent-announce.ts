@@ -37,7 +37,9 @@ export const main = () => {
     PropertiesService.getScriptProperties().getProperty("SLACK_APP_TOKEN");
   if (!slackAppToken) throw new Error("SLACK_APP_TOKEN is not defined");
 
-  const calendarIds = getSlackMember(slackAppToken);
+  const client = getSlackClient(slackAppToken);
+
+  const calendarIds = getSlackMember(slackAppToken, client);
   // const calendarIds = ["masaya.hirose@siiibo.com", "yukiko.orui@siiibo.com"];
 
   const searchWord = /休暇/;
@@ -59,8 +61,6 @@ export const main = () => {
   );
   console.log(displayMessage);
 
-  const client = getSlackClient(slackAppToken);
-
   if (displayMessage !== undefined) {
     client.chat.postMessage({
       channel: postSlackChannel,
@@ -69,29 +69,27 @@ export const main = () => {
   }
 };
 
-const getSlackMember = (slackAppToken: string): string[] => {
-  const options: GoogleAppsScript.URL_Fetch.URLFetchRequestOptions = {
-    method: "get",
-    contentType: "application/x-www-form-urlencoded",
-    payload: {
-      token: slackAppToken,
-    },
-  };
-
+const getSlackMember = (slackAppToken: string, client: SlackClient) => {
   const emailList = [];
-  const url = "https://slack.com/api/users.list";
-  const response = UrlFetchApp.fetch(url, options);
-
-  const slackMembers = JSON.parse(response.getContentText()).members;
+  const response = client.users.list({ token: slackAppToken });
+  const slackMembers = response.members;
+  if (!slackMembers) throw new Error("SLACK_MEMBERS is not defined");
 
   for (const slackMember of slackMembers) {
-    if (
+    const isMember =
       !slackMember.deleted &&
       !slackMember.is_bot &&
-      slackMember.id !== "USLACKBOT" &&
-      slackMember.profile.email.match("siiibo.com")
-    ) {
-      emailList.push(slackMember.profile.email);
+      slackMember.id !== "USLACKBOT"
+        ? true
+        : false;
+
+    if (isMember) {
+      if (!slackMember.profile)
+        throw new Error("SLACK_MEMBERS_PROFILE is not defined");
+      if (!slackMember.profile.email)
+        throw new Error("SLACK_MEMBERS_PROFILE_EMAIL is not defined");
+      if (slackMember.profile.email.match("siiibo.com"))
+        emailList.push(slackMember.profile.email);
     }
   }
   return emailList;
