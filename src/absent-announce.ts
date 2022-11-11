@@ -7,10 +7,8 @@ import {
   setHours,
   nextMonday,
   startOfWeek,
-  previousMonday,
   startOfMonth,
   addMonths,
-  isSameDay,
 } from "date-fns";
 
 export const deleteAndSetTriggers = () => {
