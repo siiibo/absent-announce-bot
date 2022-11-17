@@ -60,12 +60,12 @@ export const main = () => {
   );
   console.log(displayMessage);
 
-  // if (displayMessage !== undefined) {
-  //   client.chat.postMessage({
-  //     channel: postSlackChannel,
-  //     text: displayMessage,
-  //   });
-  // }
+  if (displayMessage !== undefined) {
+    client.chat.postMessage({
+      channel: postSlackChannel,
+      text: displayMessage,
+    });
+  }
 };
 
 const getSlackMemberEmail = (client: SlackClient) => {
@@ -164,16 +164,9 @@ const createMessage = (
   const creatorEmail = event.getCreators()[0];
   const name = convertEmailToName(creatorEmail);
 
-  const eventTitle = event.isAllDayEvent() ? "全休" : "半休";
-  const eventDate = event.isAllDayEvent()
-    ? `${eventStartDate}〜${eventEndDate}`
-    : `${eventStartDate}`;
-  const eventHour = event.isAllDayEvent()
-    ? "終日"
-    : `${eventStartTime}〜${eventEndTime}`;
-  const message = `【${eventTitle}】 ${name}さん ${eventDate} ${eventHour}\n`;
-
-  return message;
+  return event.isAllDayEvent()
+    ? `【全休】 ${name}さん ${eventStartDate}〜${eventEndDate} 終日\n`
+    : `【半休】 ${name}さん ${eventStartDate} ${eventStartTime}〜${eventEndTime}\n`;
 };
 
 const getMessagesFromCalender = (
