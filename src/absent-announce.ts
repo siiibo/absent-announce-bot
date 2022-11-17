@@ -68,38 +68,24 @@ export const main = () => {
   }
 };
 
-const getSlackMemberEmail = (client: SlackClient) => {
-  const emailList = [];
+const getSlackMemberEmail = (client: SlackClient): (string | undefined)[] => {
   const response = client.users.list();
   const slackMembers = response.members;
   if (!slackMembers) throw new Error("SLACK_MEMBERS is not defined");
 
-  // const slackMembers_ = slackMembers.filter(
-  //   (slackMember) =>
-  //     !slackMember.deleted &&
-  //     !slackMember.is_bot &&
-  //     slackMember.id !== "USLACKBOT" &&
-  //     !slackMember.profile &&
-  //     !slackMember.profile.email &&
-  //     slackMember.profile.email
-  // );
-
-  for (const slackMember of slackMembers) {
-    const isMember =
+  const siiiboSlackMembers = slackMembers.filter(
+    (slackMember) =>
       !slackMember.deleted &&
       !slackMember.is_bot &&
-      slackMember.id !== "USLACKBOT";
+      slackMember.id !== "USLACKBOT" &&
+      slackMember.profile?.email?.match("siiibo.com")
+  );
 
-    if (isMember) {
-      if (!slackMember.profile)
-        throw new Error("SLACK_MEMBERS_PROFILE is not defined");
-      if (!slackMember.profile.email)
-        throw new Error("SLACK_MEMBERS_PROFILE_EMAIL is not defined");
-      if (slackMember.profile.email.match("siiibo.com"))
-        emailList.push(slackMember.profile.email);
-    }
-  }
-  return emailList;
+  const emails = siiiboSlackMembers.map(
+    (slackMember) => slackMember.profile?.email
+  );
+
+  return emails;
 };
 
 function isSameDate(
@@ -178,7 +164,7 @@ const createMessage = (
 };
 
 const getMessagesFromCalender = (
-  emails: string[],
+  emails: (string | undefined)[],
   searchWord: RegExp,
   startDate: Date,
   endDate: Date
@@ -189,6 +175,9 @@ const getMessagesFromCalender = (
 
   for (const email of emails) {
     // emailをCalendarIdとして利用可能
+    if (!email) {
+      continue;
+    }
     const calendar = CalendarApp.getCalendarById(email);
     if (calendar === null) {
       continue;
