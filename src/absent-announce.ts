@@ -74,13 +74,21 @@ const getSlackMemberEmail = (client: SlackClient) => {
   const slackMembers = response.members;
   if (!slackMembers) throw new Error("SLACK_MEMBERS is not defined");
 
+  // const slackMembers_ = slackMembers.filter(
+  //   (slackMember) =>
+  //     !slackMember.deleted &&
+  //     !slackMember.is_bot &&
+  //     slackMember.id !== "USLACKBOT" &&
+  //     !slackMember.profile &&
+  //     !slackMember.profile.email &&
+  //     slackMember.profile.email
+  // );
+
   for (const slackMember of slackMembers) {
     const isMember =
       !slackMember.deleted &&
       !slackMember.is_bot &&
-      slackMember.id !== "USLACKBOT"
-        ? true
-        : false;
+      slackMember.id !== "USLACKBOT";
 
     if (isMember) {
       if (!slackMember.profile)
@@ -177,7 +185,7 @@ const getMessagesFromCalender = (
 ): string | undefined => {
   const messageList = [];
   const today = new Date();
-  const isAnnounceDate = isSameDate(today, startDate) ? true : false;
+  const isAnnounceDate = isSameDate(today, startDate);
 
   for (const email of emails) {
     // emailをCalendarIdとして利用可能
@@ -202,7 +210,7 @@ const getMessagesFromCalender = (
       yesterday.setDate(yesterday.getDate() - 1);
       const eventCreateDay = event.getDateCreated();
       const needsAddMessage =
-        !isAnnounceDate && isSameDate(yesterday, eventCreateDay) ? true : false;
+        !isAnnounceDate && isSameDate(yesterday, eventCreateDay);
 
       if (!isAnnounceDate && !needsAddMessage) {
         continue;
