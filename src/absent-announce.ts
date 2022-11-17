@@ -149,11 +149,17 @@ const convertEmailtoName = (email: string): string => {
 const createMessage = (
   event: GoogleAppsScript.Calendar.CalendarEvent
 ): string => {
-  const eventStartDate = format(Number(event.getStartTime()), "M/d");
-  const eventStartTime = format(Number(event.getStartTime()), "k:mm");
+  const eventStartDate = format(
+    new Date(event.getStartTime().getTime()),
+    "M/d"
+  );
+  const eventStartTime = format(
+    new Date(event.getStartTime().getTime()),
+    "k:mm"
+  );
 
-  const eventEndDate = format(Number(event.getEndTime()), "M/d");
-  const eventEndTime = format(Number(event.getEndTime()), "k:mm");
+  const eventEndDate = format(new Date(event.getEndTime().getTime()), "M/d");
+  const eventEndTime = format(new Date(event.getEndTime().getTime()), "k:mm");
 
   const creatorEmail = event.getCreators()[0];
   const name = convertEmailtoName(creatorEmail);
