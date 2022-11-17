@@ -81,9 +81,9 @@ const getSlackMemberEmail = (client: SlackClient): (string | undefined)[] => {
       slackMember.profile?.email?.match("siiibo.com")
   );
 
-  const emails = siiiboSlackMembers
-    .map((slackMember) => slackMember.profile?.email ?? "")
-    .filter(Boolean);
+  const emails = siiiboSlackMembers.map(
+    (slackMember) => slackMember.profile?.email
+  );
 
   return emails;
 };
