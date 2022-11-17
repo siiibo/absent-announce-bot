@@ -52,23 +52,23 @@ export const main = () => {
   console.log("startdate", startDate);
   console.log("enddate", endDate);
 
-  const displayMessage = getMessagesFromCalender(
+  const displayedMessage = getMessagesFromCalender(
     emails,
     searchWord,
     startDate,
     endDate
   );
-  console.log(displayMessage);
+  console.log(displayedMessage);
 
-  if (displayMessage !== undefined) {
+  if (displayedMessage !== undefined) {
     client.chat.postMessage({
       channel: postSlackChannel,
-      text: displayMessage,
+      text: displayedMessage,
     });
   }
 };
 
-const getSlackMemberEmail = (client: SlackClient): (string | undefined)[] => {
+const getSlackMemberEmail = (client: SlackClient): string[] => {
   const response = client.users.list();
   const slackMembers = response.members;
   if (!slackMembers) throw new Error("SLACK_MEMBERS is not defined");
