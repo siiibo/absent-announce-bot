@@ -41,7 +41,7 @@ export const main = () => {
 
   const client = getSlackClient(slackAppToken);
 
-  const emails = getSlackMemberEmail(slackAppToken, client);
+  const emails = getSlackMemberEmail(client);
 
   const searchWord = /休暇/;
   const postSlackChannel = "#attendance";
@@ -68,9 +68,9 @@ export const main = () => {
   // }
 };
 
-const getSlackMemberEmail = (slackAppToken: string, client: SlackClient) => {
+const getSlackMemberEmail = (client: SlackClient) => {
   const emailList = [];
-  const response = client.users.list({ token: slackAppToken });
+  const response = client.users.list();
   const slackMembers = response.members;
   if (!slackMembers) throw new Error("SLACK_MEMBERS is not defined");
 
