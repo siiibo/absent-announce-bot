@@ -52,7 +52,7 @@ export const main = () => {
   console.log("startdate", startDate);
   console.log("enddate", endDate);
 
-  const displayMessage = getMessagesfromCalender(
+  const displayMessage = getMessagesFromCalender(
     calendarIds,
     searchWord,
     startDate,
@@ -140,7 +140,7 @@ const getStartEndDate = (
 };
 
 // 入力: yukiko.orui@siiibo.com 出力: orui yukiko
-const convertEmailtoName = (email: string): string => {
+const convertEmailToName = (email: string): string => {
   const firstName = email.split(".")[0];
   const familyName = email.split(".")[1].split("@")[0];
   return familyName + " " + firstName;
@@ -162,7 +162,7 @@ const createMessage = (
   const eventEndTime = format(new Date(event.getEndTime().getTime()), "k:mm");
 
   const creatorEmail = event.getCreators()[0];
-  const name = convertEmailtoName(creatorEmail);
+  const name = convertEmailToName(creatorEmail);
 
   const eventTitle = event.isAllDayEvent() ? "全休" : "半休";
   const eventDate = event.isAllDayEvent()
@@ -176,7 +176,7 @@ const createMessage = (
   return message;
 };
 
-const getMessagesfromCalender = (
+const getMessagesFromCalender = (
   calendarIds: string[],
   searchWord: RegExp,
   startDate: Date,
