@@ -224,84 +224,10 @@ const getMessagesFromCalender = (
     return undefined;
   }
 
-  const displayedMessage = messageList.join("");
+  const displayMessage = messageList.join("");
 
-  return displayedMessage;
+  return displayMessage;
 };
-
-// const getMessagesFromCalender = (
-//   emails: string[],
-//   searchWord: RegExp,
-//   startDate: Date,
-//   endDate: Date
-// ): string | undefined => {
-//   const messageList = [];
-//   const today = new Date();
-//   const isAnnounceDate = isSameDate(today, startDate);
-
-//   const emailsDefined: string = emails.filter(
-//     (email) => typeof email === "string"
-//   );
-
-//   // email[] → calendar[]
-//   // emailをCalendarIdとして利用可能
-//   const calendars = emails.map((email) => CalendarApp.getCalendarById(email));
-//   // calendarがnullじゃないcalendarに絞る
-//   const eventCalendars_ = calendars.filter((calendar) => calendar);
-//   // わかりにくいな
-//   const eventCalendars = eventCalendars_.filter(
-//     (calendar) => calendar.getEvents(startDate, endDate).length < 1
-//   );
-
-//   messageList = eventCalendars;
-//   for (const calendar of eventCalendars) {
-//     const events = calendar.getEvents(startDate, endDate);
-//     if (events.length < 1) {
-//       continue;
-//     }
-
-//     // const eventMatchWord = events.filter((event) => event.getTitle().match(searchWord))
-//     for (const eventIndex in events) {
-//       //
-//       const event = events[eventIndex];
-//       const title = event.getTitle();
-//       // if (!title.match(searchWord)) {
-//       //   continue;
-//       // }
-
-//       const yesterday = new Date();
-//       yesterday.setDate(yesterday.getDate() - 1);
-//       const eventCreateDay = event.getDateCreated();
-//       const needsAddMessage =
-//         !isAnnounceDate && isSameDate(yesterday, eventCreateDay);
-
-//       if (!isAnnounceDate && !needsAddMessage) {
-//         continue;
-//       }
-
-//       const message = createMessage(event);
-//       messageList.push(message);
-//     }
-//   }
-
-//   if (isAnnounceDate) {
-//     if (messageList.length < 1) {
-//       messageList.push("休暇取得者はいません");
-//     }
-
-//     const messageTitle = "-休暇取得者-\n";
-//     messageList.unshift(messageTitle);
-//   } else if (messageList.length >= 1) {
-//     const messageTitle = "-休暇取得者 (昨日追加)-\n";
-//     messageList.unshift(messageTitle);
-//   } else {
-//     return undefined;
-//   }
-
-//   const displayedMessage = messageList.join("");
-
-//   return displayedMessage;
-// };
 
 const getSlackClient = (slackAppToken: string) => {
   return new SlackClient(slackAppToken);
