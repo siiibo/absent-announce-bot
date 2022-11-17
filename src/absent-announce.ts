@@ -41,7 +41,7 @@ export const main = () => {
 
   const client = getSlackClient(slackAppToken);
 
-  const calendarIds = getSlackMember(slackAppToken, client);
+  const emails = getSlackMemberEmail(slackAppToken, client);
 
   const searchWord = /休暇/;
   const postSlackChannel = "#attendance";
@@ -53,7 +53,7 @@ export const main = () => {
   console.log("enddate", endDate);
 
   const displayMessage = getMessagesFromCalender(
-    calendarIds,
+    emails,
     searchWord,
     startDate,
     endDate
@@ -68,7 +68,7 @@ export const main = () => {
   // }
 };
 
-const getSlackMember = (slackAppToken: string, client: SlackClient) => {
+const getSlackMemberEmail = (slackAppToken: string, client: SlackClient) => {
   const emailList = [];
   const response = client.users.list({ token: slackAppToken });
   const slackMembers = response.members;
@@ -177,7 +177,7 @@ const createMessage = (
 };
 
 const getMessagesFromCalender = (
-  calendarIds: string[],
+  emails: string[],
   searchWord: RegExp,
   startDate: Date,
   endDate: Date
@@ -186,12 +186,13 @@ const getMessagesFromCalender = (
   const today = new Date();
   const isAnnounceDate = isSameDate(today, startDate) ? true : false;
 
-  for (const calendarId of calendarIds) {
-    const calendar = CalendarApp.getCalendarById(calendarId);
+  for (const email of emails) {
+    // emailをCalendarIdとして利用可能
+    const calendar = CalendarApp.getCalendarById(email);
     if (calendar === null) {
       continue;
     }
-    console.log(calendarId);
+    console.log(email);
     const events = calendar.getEvents(startDate, endDate);
     if (events.length < 1) {
       continue;
