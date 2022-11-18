@@ -175,7 +175,9 @@ const getCalendarsFromEmails = (
   startDate: Date,
   endDate: Date
 ): GoogleAppsScript.Calendar.Calendar[] => {
-  const calendars = emails.map((email) => CalendarApp.getCalendarById(email));
+  const calendars = emails
+    .map((email) => CalendarApp.getCalendarById(email))
+    .filter((calendar) => calendar);
 
   return calendars;
 };
