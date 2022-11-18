@@ -68,7 +68,7 @@ export const main = () => {
   }
 };
 
-const getSlackMemberEmail = (client: SlackClient): string[] => {
+const getSlackMemberEmail = (client: SlackClient): (string | undefined)[] => {
   const response = client.users.list();
   const slackMembers = response.members;
   if (!slackMembers) throw new Error("SLACK_MEMBERS is not defined");
@@ -81,9 +81,9 @@ const getSlackMemberEmail = (client: SlackClient): string[] => {
       slackMember.profile?.email?.match("siiibo.com")
   );
 
-  const emails = siiiboSlackMembers
-    .map((slackMember) => slackMember.profile?.email ?? "")
-    .filter(Boolean);
+  const emails = siiiboSlackMembers.map(
+    (slackMember) => slackMember.profile?.email
+  );
 
   return emails;
 };
