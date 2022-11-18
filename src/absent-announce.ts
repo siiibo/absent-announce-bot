@@ -52,19 +52,23 @@ export const main = () => {
   console.log("startdate", startDate);
   console.log("enddate", endDate);
 
-  const displayMessage = getMessagesFromCalender(
-    emails,
-    searchWord,
-    startDate,
-    endDate
-  );
-  console.log(displayMessage);
+  const today = new Date();
+  const isAnnounceDate = isSameDate(today, startDate);
 
-  if (displayMessage !== undefined) {
-    client.chat.postMessage({
-      channel: postSlackChannel,
-      text: displayMessage,
-    });
+  if (isAnnounceDate) {
+    const displayMessage = getMessagesFromEmails(
+      emails,
+      searchWord,
+      startDate,
+      endDate
+    );
+
+    console.log(displayMessage);
+
+    // client.chat.postMessage({
+    //   channel: postSlackChannel,
+    //   text: displayMessage,
+    // });
   }
 };
 
@@ -163,47 +167,63 @@ const createMessage = (
     : `【半休】 ${name}さん ${eventStartDate} ${eventStartTime}〜${eventEndTime}\n`;
 };
 
-const getMessagesFromCalender = (
+const getCalendarsFromEmails = (
   emails: string[],
-  searchWord: RegExp,
   startDate: Date,
   endDate: Date
-): string | undefined => {
-  const today = new Date();
-  const yesterday = addDays(today, -1);
-  const isAnnounceDate = isSameDate(today, startDate);
-
+): GoogleAppsScript.Calendar.Calendar[] => {
   const calendars = emails
     .map((email) => CalendarApp.getCalendarById(email))
     .filter((calendar) => calendar)
     .filter((calendar) => calendar.getEvents(startDate, endDate).length >= 1);
 
+  return calendars;
+};
+
+const getEventsFromCalendars = (
+  calendars: GoogleAppsScript.Calendar.Calendar[],
+  startDate: Date,
+  endDate: Date,
+  searchWord: RegExp
+): GoogleAppsScript.Calendar.CalendarEvent[] => {
   const events = calendars
     .map((calendar) => calendar.getEvents(startDate, endDate))
     .flatMap((num) => num)
-    .filter((event) => event.getTitle().match(searchWord))
-    .filter(
-      (event) => isAnnounceDate || isSameDate(yesterday, event.getDateCreated())
-    );
+    .filter((event) => event.getTitle().match(searchWord));
 
-  const messageList = events.map((event) => createMessage(event));
+  return events;
+};
 
-  if (isAnnounceDate) {
-    if (messageList.length < 1) {
-      messageList.push("休暇取得者はいません");
-    }
-
-    const messageTitle = "-休暇取得者-\n";
-    messageList.unshift(messageTitle);
-  } else if (messageList.length >= 1) {
-    const messageTitle = "-休暇取得者 (昨日追加)-\n";
-    messageList.unshift(messageTitle);
+const createMesssagesFromEvents = (
+  events: GoogleAppsScript.Calendar.CalendarEvent[]
+): string => {
+  if (events.length < 1) {
+    const displayMessage = "-休暇取得者-\n休暇取得者はいません";
+    return displayMessage;
   } else {
-    return undefined;
+    const messageList = events.map((event) => createMessage(event));
+    const messageTitle = "-休暇取得者-\n";
+    const displayMessage = messageTitle + messageList.join("");
+    return displayMessage;
   }
+};
 
-  const displayMessage = messageList.join("");
+const getMessagesFromEmails = (
+  emails: string[],
+  searchWord: RegExp,
+  startDate: Date,
+  endDate: Date
+): string => {
+  const calendars = getCalendarsFromEmails(emails, startDate, endDate);
 
+  const events = getEventsFromCalendars(
+    calendars,
+    startDate,
+    endDate,
+    searchWord
+  );
+
+  const displayMessage = createMesssagesFromEvents(events);
   return displayMessage;
 };
 
