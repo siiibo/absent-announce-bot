@@ -187,8 +187,7 @@ const getEventsFromCalendars = (
   searchWord: RegExp
 ): GoogleAppsScript.Calendar.CalendarEvent[] => {
   const events = calendars
-    .map((calendar) => calendar.getEvents(startDate, endDate))
-    .flatMap((num) => num)
+    .flatMap((calendar) => calendar.getEvents(startDate, endDate))
     .filter((event) => event.getTitle().match(searchWord));
 
   return events;
