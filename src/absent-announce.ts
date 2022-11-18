@@ -58,18 +58,18 @@ export const main = () => {
   const isAnnounceDate = isSameDate(today, startDate);
 
   if (isAnnounceDate) {
-    const messageDisplayed = getMessagesFromEmails(
+    const displayMessage = getMessagesFromEmails(
       emails,
       searchWord,
       startDate,
       endDate
     );
 
-    console.log(messageDisplayed);
+    console.log(displayMessage);
 
     // client.chat.postMessage({
     //   channel: postSlackChannel,
-    //   text: messageDisplayed,
+    //   text: displayMessage,
     // });
   }
 };
@@ -201,13 +201,13 @@ const createMesssagesFromEvents = (
   events: GoogleAppsScript.Calendar.CalendarEvent[]
 ): string => {
   if (events.length < 1) {
-    const messageDisplayed = "-休暇取得者-\n休暇取得者はいません";
-    return messageDisplayed;
+    const displayMessage = "-休暇取得者-\n休暇取得者はいません";
+    return displayMessage;
   } else {
     const messageList = events.map((event) => createMessage(event));
     const messageTitle = "-休暇取得者-\n";
-    const messageDisplayed = messageTitle + messageList.join("");
-    return messageDisplayed;
+    const displayMessage = messageTitle + messageList.join("");
+    return displayMessage;
   }
 };
 
@@ -226,8 +226,8 @@ const getMessagesFromEmails = (
     searchWord
   );
 
-  const messageDisplayed = createMesssagesFromEvents(events);
-  return messageDisplayed;
+  const displayMessage = createMesssagesFromEvents(events);
+  return displayMessage;
 };
 
 const getSlackClient = (slackAppToken: string) => {
