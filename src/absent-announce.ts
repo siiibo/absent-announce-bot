@@ -7,6 +7,8 @@ import {
   startOfMonth,
   addMonths,
   format,
+  startOfDay,
+  endOfDay,
 } from "date-fns";
 
 type SearchPeriod = "day" | "week" | "month";
@@ -117,8 +119,9 @@ const getStartEndDate = (
 ): { start: Date; end: Date } => {
   switch (searchPeriod) {
     case "day": {
-      const startDate = setMidnight(new Date());
-      const endDate = addDays(startDate, 1);
+      const startDate = startOfDay(new Date());
+      const endDate = endOfDay(new Date());
+
       return { start: startDate, end: endDate };
     }
 
