@@ -169,46 +169,24 @@ const getMessagesFromCalender = (
   startDate: Date,
   endDate: Date
 ): string | undefined => {
-  const messageList = [];
   const today = new Date();
+  const yesterday = addDays(today, -1);
   const isAnnounceDate = isSameDate(today, startDate);
 
-  for (const email of emails) {
-    // emailをCalendarIdとして利用可能
-    if (!email) {
-      continue;
-    }
-    const calendar = CalendarApp.getCalendarById(email);
-    if (calendar === null) {
-      continue;
-    }
-    console.log(email);
-    const events = calendar.getEvents(startDate, endDate);
-    if (events.length < 1) {
-      continue;
-    }
+  const calendars = emails
+    .map((email) => CalendarApp.getCalendarById(email))
+    .filter((calendar) => calendar)
+    .filter((calendar) => calendar.getEvents(startDate, endDate).length >= 1);
 
-    for (const eventIndex in events) {
-      const event = events[eventIndex];
-      const title = event.getTitle();
-      if (!title.match(searchWord)) {
-        continue;
-      }
+  const events = calendars
+    .map((calendar) => calendar.getEvents(startDate, endDate))
+    .flatMap((num) => num)
+    .filter((event) => event.getTitle().match(searchWord))
+    .filter(
+      (event) => isAnnounceDate || isSameDate(yesterday, event.getDateCreated())
+    );
 
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const eventCreateDay = event.getDateCreated();
-      const needsAddMessage =
-        !isAnnounceDate && isSameDate(yesterday, eventCreateDay);
-
-      if (!isAnnounceDate && !needsAddMessage) {
-        continue;
-      }
-
-      const message = createMessage(event);
-      messageList.push(message);
-    }
-  }
+  const messageList = events.map((event) => createMessage(event));
 
   if (isAnnounceDate) {
     if (messageList.length < 1) {
