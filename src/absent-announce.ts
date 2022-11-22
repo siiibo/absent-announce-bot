@@ -57,7 +57,7 @@ export const main = () => {
   const isAnnounceDate = isSameDate(today, startDate);
 
   if (isAnnounceDate) {
-    const calendars = getCalendarsFromEmails(emails, startDate, endDate);
+    const calendars = getCalendarsFromEmails(emails);
 
     const events = getEventsFromCalendars(
       calendars,
@@ -163,9 +163,7 @@ const createMessage = (
 };
 
 const getCalendarsFromEmails = (
-  emails: string[],
-  startDate: Date,
-  endDate: Date
+  emails: string[]
 ): GoogleAppsScript.Calendar.Calendar[] => {
   const calendars = emails
     .map((email) => CalendarApp.getCalendarById(email))
