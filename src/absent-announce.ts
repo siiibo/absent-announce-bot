@@ -50,8 +50,6 @@ export const main = () => {
   const startEndDate = getStartEndDate(searchPeriod);
   const startDate = startEndDate.start;
   const endDate = startEndDate.end;
-  console.log("startdate", startDate);
-  console.log("enddate", endDate);
 
   const today = new Date();
   const isAnnounceDate = isSameDate(today, startDate);
@@ -68,12 +66,10 @@ export const main = () => {
 
     const messagesToNotify = createMesssagesFromEvents(events);
 
-    console.log(messagesToNotify);
-
-    // client.chat.postMessage({
-    //   channel: postSlackChannel,
-    //   text: messagesToNotify,
-    // });
+    client.chat.postMessage({
+      channel: postSlackChannel,
+      text: messagesToNotify,
+    });
   }
 };
 
