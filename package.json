@@ -16,6 +16,9 @@
     "create": "pwd | awk -F'/' '{print $NF}' | xargs -I {} clasp create --rootDir build --title {} --type standalone && mv build/.clasp.json ./"
   },
   "dependencies": {
+
+    "@hi-se/web-api": "https://gitpkg.now.sh/hi-se/node-slack-sdk/packages/web-api?ab078b145617d511327a8f74fe34f1d4695ff893",
+
     "date-fns": "^2.29.3"
   },
   "devDependencies": {
