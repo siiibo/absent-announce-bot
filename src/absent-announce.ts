@@ -1,14 +1,13 @@
 import { GasWebClient as SlackClient } from "@hi-se/web-api";
 import {
   addDays,
-  set,
-  nextMonday,
   startOfWeek,
   startOfMonth,
-  addMonths,
   format,
   startOfDay,
   endOfDay,
+  nextSunday,
+  endOfMonth,
 } from "date-fns";
 
 type SearchPeriod = "day" | "week" | "month";
@@ -103,17 +102,6 @@ function isSameDate(
   );
 }
 
-const setMidnight = (nowDate: Date): Date => {
-  const midnightDate = set(nowDate, {
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-    milliseconds: 0,
-  });
-
-  return midnightDate;
-};
-
 const getStartEndDate = (
   searchPeriod: SearchPeriod
 ): { start: Date; end: Date } => {
@@ -127,14 +115,14 @@ const getStartEndDate = (
 
     case "week": {
       const thisMonday = addDays(startOfWeek(new Date()), 1);
-      const startDate = setMidnight(thisMonday);
-      const endDate = setMidnight(nextMonday(new Date()));
+      const startDate = startOfDay(thisMonday);
+      const endDate = endOfDay(nextSunday(new Date()));
       return { start: startDate, end: endDate };
     }
 
     case "month": {
-      const startDate = setMidnight(startOfMonth(new Date()));
-      const endDate = addMonths(startDate, 1);
+      const startDate = startOfMonth(new Date());
+      const endDate = endOfMonth(startDate);
       return { start: startDate, end: endDate };
     }
   }
