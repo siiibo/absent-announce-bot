@@ -57,12 +57,16 @@ export const main = () => {
   const isAnnounceDate = isSameDate(today, startDate);
 
   if (isAnnounceDate) {
-    const messagesToNotify = getMessagesFromEmails(
-      emails,
-      searchWord,
+    const calendars = getCalendarsFromEmails(emails, startDate, endDate);
+
+    const events = getEventsFromCalendars(
+      calendars,
       startDate,
-      endDate
+      endDate,
+      searchWord
     );
+
+    const messagesToNotify = createMesssagesFromEvents(events);
 
     console.log(messagesToNotify);
 
@@ -195,25 +199,6 @@ const createMesssagesFromEvents = (
     const messagesToNotify = messageTitle + messageList.join("");
     return messagesToNotify;
   }
-};
-
-const getMessagesFromEmails = (
-  emails: string[],
-  searchWord: RegExp,
-  startDate: Date,
-  endDate: Date
-): string => {
-  const calendars = getCalendarsFromEmails(emails, startDate, endDate);
-
-  const events = getEventsFromCalendars(
-    calendars,
-    startDate,
-    endDate,
-    searchWord
-  );
-
-  const messagesToNotify = createMesssagesFromEvents(events);
-  return messagesToNotify;
 };
 
 const getSlackClient = (slackAppToken: string) => {
