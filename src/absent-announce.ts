@@ -1,6 +1,7 @@
 import { GasWebClient as SlackClient } from "@hi-se/web-api";
 import {
   addDays,
+  addHours,
   startOfWeek,
   startOfMonth,
   format,
@@ -153,11 +154,19 @@ const createMessage = (
   const creatorEmail = event.getCreators()[0];
   const name = convertEmailToName(creatorEmail);
 
-  return event.isAllDayEvent()
-    ? `【全休】 ${name}さん ${eventStartDate}〜${eventEndDate} 終日\n`
-    : `【半休】 ${name}さん ${eventStartDate} ${eventStartTime}〜${eventEndTime}\n`;
+  return isWholeHoliday(event)
+    ? `${name}さん ${eventStartDate}〜${eventEndDate} 全休\n`
+    : `${name}さん ${eventStartDate} ${eventStartTime}〜${eventEndTime}\n`;
 };
 
+const isWholeHoliday = (
+  event: GoogleAppsScript.Calendar.CalendarEvent
+): boolean => {
+  return (
+    addHours(new Date(event.getStartTime().getTime()), 6) <
+    new Date(event.getEndTime().getTime())
+  );
+};
 const getCalendarsFromEmails = (
   emails: string[]
 ): GoogleAppsScript.Calendar.Calendar[] => {
