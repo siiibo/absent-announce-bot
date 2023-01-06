@@ -185,12 +185,11 @@ const createMesssagesFromEvents = (
   events: GoogleAppsScript.Calendar.CalendarEvent[]
 ): string => {
   if (events.length < 1) {
-    const messagesToNotify = "-休暇取得者-\n休暇取得者はいません";
+    const messagesToNotify = "休暇取得者はいません";
     return messagesToNotify;
   } else {
     const messageList = events.map((event) => createMessage(event));
-    const messageTitle = "-休暇取得者-\n";
-    const messagesToNotify = messageTitle + messageList.join("");
+    const messagesToNotify = messageList.join("");
     return messagesToNotify;
   }
 };
