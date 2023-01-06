@@ -138,24 +138,19 @@ const convertEmailToName = (email: string): string => {
 const createMessage = (
   event: GoogleAppsScript.Calendar.CalendarEvent
 ): string => {
-  const eventStartDate = format(
-    new Date(event.getStartTime().getTime()),
-    "M/d"
-  );
   const eventStartTime = format(
     new Date(event.getStartTime().getTime()),
     "k:mm"
   );
 
-  const eventEndDate = format(new Date(event.getEndTime().getTime()), "M/d");
   const eventEndTime = format(new Date(event.getEndTime().getTime()), "k:mm");
 
   const creatorEmail = event.getCreators()[0];
   const name = convertEmailToName(creatorEmail);
 
   return event.isAllDayEvent()
-    ? `【全休】 ${name}さん ${eventStartDate}〜${eventEndDate} 終日\n`
-    : `【半休】 ${name}さん ${eventStartDate} ${eventStartTime}〜${eventEndTime}\n`;
+    ? `【全休】 ${name}さん 終日\n`
+    : `【半休】 ${name}さん ${eventStartTime}〜${eventEndTime}\n`;
 };
 
 const getCalendarsFromEmails = (
