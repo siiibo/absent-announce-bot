@@ -12,7 +12,10 @@ import {
 
 type SearchPeriod = "day" | "week" | "month";
 
+const isWeekends = (day = new Date()) => day.getDay() % 6 === 0;
+
 export const deleteAndSetTriggers = () => {
+  if (isWeekends()) return;
   const triggeredFunction = "main";
   deleteTriggers(triggeredFunction);
   const today = new Date();
