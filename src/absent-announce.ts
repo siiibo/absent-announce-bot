@@ -8,14 +8,23 @@ import {
   endOfDay,
   nextSunday,
   endOfMonth,
+  isWeekend,
 } from "date-fns";
 
 type SearchPeriod = "day" | "week" | "month";
 
+const isHoliday = (day: Date): boolean => {
+  const calendarId = "ja.japanese#holiday@group.v.calendar.google.com";
+  const calendar = CalendarApp.getCalendarById(calendarId);
+  const holidayEvents = calendar.getEventsForDay(day);
+  return holidayEvents.length > 0;
+};
+
 export const deleteAndSetTriggers = () => {
+  const today = new Date();
+  if (isWeekend(today) || isHoliday(today)) return;
   const triggeredFunction = "main";
   deleteTriggers(triggeredFunction);
-  const today = new Date();
   const triggerTime = "9:00";
   const triggerHour = Number(triggerTime.split(":")[0]);
   const triggerMinute = Number(triggerTime.split(":")[1]);
