@@ -15,7 +15,7 @@ type SearchPeriod = "day" | "week" | "month";
 
 const isHoliday = (day: Date): boolean => {
   const calendarId = "ja.japanese#holiday@group.v.calendar.google.com";
-  const calendar = CalendarApp.getCalendarById(calendarId); //翌日にイベントが設定されているか取得し、イベントが有る場合はtrueを返す
+  const calendar = CalendarApp.getCalendarById(calendarId);
   const holidayEvents = calendar.getEventsForDay(day);
   return holidayEvents.length > 0;
 };
