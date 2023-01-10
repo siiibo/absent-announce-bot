@@ -13,9 +13,16 @@ import {
 
 type SearchPeriod = "day" | "week" | "month";
 
+const isHoliday = (day: Date): boolean => {
+  const calendarId = "ja.japanese#holiday@group.v.calendar.google.com";
+  const calendar = CalendarApp.getCalendarById(calendarId); //翌日にイベントが設定されているか取得し、イベントが有る場合はtrueを返す
+  const holidayEvents = calendar.getEventsForDay(day);
+  return holidayEvents.length > 0;
+};
+
 export const deleteAndSetTriggers = () => {
   const today = new Date();
-  if (isWeekend(today)) return;
+  if (isWeekend(today) || isHoliday(today)) return;
   const triggeredFunction = "main";
   deleteTriggers(triggeredFunction);
   const triggerTime = "9:00";
