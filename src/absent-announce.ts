@@ -14,10 +14,10 @@ import {
 type SearchPeriod = "day" | "week" | "month";
 
 export const deleteAndSetTriggers = () => {
-  if (isWeekend(new Date())) return;
+  const today = new Date();
+  if (isWeekend(today)) return;
   const triggeredFunction = "main";
   deleteTriggers(triggeredFunction);
-  const today = new Date();
   const triggerTime = "9:00";
   const triggerHour = Number(triggerTime.split(":")[0]);
   const triggerMinute = Number(triggerTime.split(":")[1]);
